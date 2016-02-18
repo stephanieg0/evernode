@@ -4,42 +4,23 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+const note = require('./routes/note');
+
 const app = express();
 const port = process.env.PORT || 3000;
-const Note = mongoose.model('Notes', mongoose.Schema({
-  title: String,
-  text: String
-}));
 //making jade accesible
 app.set('view engine', 'jade');
 
 app.use(bodyParser.urlencoded({
   extended: false
 }))
+
 //Root Route
 app.get('/', (req, res) => {
   res.send('Server Running');
 });
-//route to serve up the form
-app.get('/notes/new', (req, res) => {
-  res.render('new-note');
-});
-//route to see individual note with a route parameter
-app.get('/notes/:id', (req, res) => {
-  Note.findById(req.params.id, (err, note) => {
-    if (err) throw err;
-    res.render('show-note', {note: note});
-  });
-});
-
-app.post('/notes', (req, res) => {
-  console.log(req.body);
-  Note.create(req.body, (err, note) => {
-    if (err) throw err;
-    console.log(note);
-    res.redirect(`/notes/${note._id}`);
-  });
-});
+//Routes
+app.use(note);
 
 //connecting to mongoose. It has to wrap the port listen function.
 mongoose.connect('mongodb://localhost:27017/evernode', (err) => {
