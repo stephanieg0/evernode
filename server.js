@@ -3,6 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 
 const note = require('./routes/note');
 
@@ -13,7 +14,10 @@ app.set('view engine', 'jade');
 
 app.use(bodyParser.urlencoded({
   extended: false
-}))
+}));
+
+//look for a query parameter in post
+app.use(methodOverride('_method'));
 
 //Root Route
 app.get('/', (req, res) => {
