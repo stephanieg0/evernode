@@ -3,27 +3,15 @@
 const express = require('express');
 const router = express.Router();
 
-const Note = require('../models/note');
+const note = require('../controllers/note');
 
 //route to serve up the form
-router.get('/notes/new', (req, res) => {
-  res.render('new-note');
-});
+router.get('/notes/new', note.newNote);
 //route to see individual note with a route parameter
-router.get('/notes/:id', (req, res) => {
-  Note.findById(req.params.id, (err, note) => {
-    if (err) throw err;
-    res.render('show-note', {note: note});
-  });
-});
-
-router.post('/notes', (req, res) => {
-  console.log(req.body);
-  Note.create(req.body, (err, note) => {
-    if (err) throw err;
-    console.log(note);
-    res.redirect(`/notes/${note._id}`);
-  });
-});
+router.get('/notes/:id', note.show);
+//deleting individual note
+router.delete('/notes/:id', note.destroy);
+router.post('/notes', note.create);
 
 module.exports = router;
+
