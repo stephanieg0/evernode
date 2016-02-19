@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 
 const note = require('./routes/note');
+const category = require('./routes/category');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.get('/', (req, res) => {
 });
 //Routes
 app.use(note);
+app.use(category);
 
 //connecting to mongoose. It has to wrap the port listen function.
 mongoose.connect('mongodb://localhost:27017/evernode', (err) => {
