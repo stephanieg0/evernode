@@ -2,6 +2,7 @@
 
 //require the schema in the models dir
 const Note = require('../models/note');
+const Category = require('../models/category');
 
 module.exports.edit = (req, res) => {
   //find through mongoose.
@@ -29,8 +30,13 @@ module.exports.index = (req, res) => {
 };
 
 module.exports.newNote = (req, res) => {
- res.render('new-note');
-};
+  Category.find({}, (err, categories) => {
+    if (err) throw err;
+    res.render('new-note', {
+      categories: categories
+    });
+  })
+ };
 
 module.exports.show = (req, res) => {
   Note.findById(req.params.id, (err, note) => {
